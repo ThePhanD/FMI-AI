@@ -1,2 +1,2 @@
 # FMI-AI
-Artificial intelligence project
+Artificial intelligence
