@@ -15,5 +15,5 @@ Insert the elements of the board: <br/>
 6 7 8 <br/>
 
 ### Example:
-![alt text](https://github.com/[username]/[FMI-AI/miniTasks/N_Sliding_Puzzle/src/Input_Example.jpg?raw=true)
+![alt text](https://github.com/[username]/[FMI-AI/miniTasks/N_Sliding_Puzzle/src/Input_Example.png?raw=true)
 
