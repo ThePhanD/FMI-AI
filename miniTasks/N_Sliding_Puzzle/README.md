@@ -17,5 +17,6 @@ Insert the elements of the board: <br/>
 ### Example:
 ![](img/Input_Example.png)
 
-###Output: <br/ >
+
+### Output:
 ![](img/Output_Example.png)
