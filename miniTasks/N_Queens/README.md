@@ -14,5 +14,7 @@ For 4 queens.
 </pre>  
 
 ### Example:
+![](img/Input_Example.png)
 
 ### Output:
+![](img/Output_Example.png)
