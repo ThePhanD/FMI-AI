@@ -6,7 +6,7 @@ N: number of vertices ( random generated ) <br>
 ( -option for manual input )
 
 ### Example:
-![](img/Input_Example.png)
+![](img/Input.png)
 
 ### Output:
 ![](img/Output_Example.png)
