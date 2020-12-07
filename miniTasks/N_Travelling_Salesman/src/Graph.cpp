@@ -29,8 +29,8 @@ bool Graph::hasCycle(vector<int> &path, int pos) {
 			return false;
 	}
 	
-	for (int i = 1; i < totalVertices; ++i) {
-		if (isSafe(i, path, pos)) {
+	for (int i = 0; i < totalVertices; ++i) {
+		if (i != startVertex && isSafe(i, path, pos)) {
 			path[pos] = i;
 
 			if (hasCycle(path, pos + 1))
