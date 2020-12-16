@@ -28,6 +28,6 @@ Congressional Voting Records Data Set
 Mean processing for '?' answers.
 
 ### Output:
-The accuracy metrics for each of the 10 trainings and their arithmetic mean.
+The accuracy metrics for each of the 10 trainings and their arithmetic mean. <br>
 ![](img/Output_Example.png)
 
