@@ -4,14 +4,15 @@ int ShipFactory::id{ 0 };
 
 Ship* ShipFactory::buildShip(ShipType &shipType) {
 	Ship *ship;
+	int idNumber = id;
 	switch (shipType) {
-		case ShipType::CARRIER: ship = new Carrier(id); 
+		case ShipType::CARRIER: ship = new Carrier(idNumber);
 			break;
-		case ShipType::CRUISER: ship = new Cruiser(id);
+		case ShipType::CRUISER: ship = new Cruiser(idNumber);
 			break;
-		case ShipType::DESTROYER: ship = new Destroyer(id);
+		case ShipType::DESTROYER: ship = new Destroyer(idNumber);
 			break;
-		case ShipType::SUBMARINE: ship = new Submarine(id);
+		case ShipType::SUBMARINE: ship = new Submarine(idNumber);
 			break;
 		default: return new Ship();
 	}
@@ -23,15 +24,16 @@ Ship* ShipFactory::buildShip(ShipType &shipType) {
 Ship* ShipFactory::buildShip(std::string &shipType) {
 	Ship *ship;
 	std::transform(shipType.begin(), shipType.end(), shipType.begin(), ::toupper);
+	int idNumber = id;
 
 	if (!shipType.compare(CARRIER_STR))
-		ship = new Carrier(id);
+		ship = new Carrier(idNumber);
 	else if (!shipType.compare(CRUISER_STR))
-		ship = new Cruiser(id);
+		ship = new Cruiser(idNumber);
 	else if (!shipType.compare(DESTROYER_STR))
-		ship = new Destroyer(id);
+		ship = new Destroyer(idNumber);
 	else if (!shipType.compare(SUBMARINE_STR))
-		ship = new Submarine(id);
+		ship = new Submarine(idNumber);
 	else
 		return new Ship();
 

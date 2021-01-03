@@ -12,7 +12,7 @@ int main()
 	*/
 
 	GameApi api;
-	api.run();
+	api.runWithOneAiProbabilityDensityAlg();
 
 
 	return 0;

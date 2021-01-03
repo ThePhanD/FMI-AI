@@ -5,7 +5,7 @@
 #include "ShipFactory.h"
 #include "Action.h"
 
-const std::string INVALID_COMMAND = "Invalid command!";
+const std::string INVALID_COMMAND = "INVALID COMMAND";
 
 class BoardHubSetUp
 {
@@ -38,5 +38,6 @@ public:
 
 	BoardHub* initBoardHub();
 	BoardHub* getBoardHub();
+	void execute(std::string command);
 };
 

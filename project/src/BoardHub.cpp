@@ -44,6 +44,9 @@ void BoardHub::attackShip(const ShipPosition &shipPosition) {
 	if (ship->isAlive()) {
 		ships.push_back(shipPosition);
 	}
+	else {
+		lineAttack(shipPosition);
+	}
 }
 
 ShipPosition BoardHub::getShipPositionAt(Position &position) {
@@ -190,6 +193,25 @@ bool BoardHub::changeShipPosition(std::string &shipPosition, std::string &newSta
 	}
 }
 
+void BoardHub::lineAttack(const ShipPosition &sp) {
+	Position startPosition = sp.getStartPosition();
+	Position endPosition = sp.getEndPosition();
+	char numberMark = (char)('0' + sp.getShip()->getSize());
+
+	if (startPosition.getRow() == endPosition.getRow()) {
+		int start = std::min(startPosition.getCol(), endPosition.getCol());
+		int end = std::max(startPosition.getCol(), endPosition.getCol());
+		for (int i = start; i <= end; i++)
+			boardEngine->placeAtPosition(startPosition.getRow(), i, numberMark);
+	}
+	else {
+		int start = std::min(startPosition.getRow(), endPosition.getRow());
+		int end = std::max(startPosition.getRow(), endPosition.getRow());
+		for (int i = start; i <= end; i++)
+			boardEngine->placeAtPosition(i, startPosition.getCol(), numberMark);
+	}
+}
+
 bool BoardHub::attack(std::string &position) {
 	
 	Position newPosition(position);
@@ -228,3 +250,6 @@ int BoardHub::getShipAvailableNumber(const ShipType &shipType) const {
 	return -1;
 }
 
+std::vector<ShipPosition> BoardHub::getShips() const {
+	return ships;
+}

@@ -14,8 +14,8 @@ bool ShipPosition::isWithinShipFields(int &startPositionField, int &endPositionF
 	return endPositionField <= field && field <= startPositionField;
 }
 
-ShipPosition::ShipPosition() : ship(), startPosition(), endPosition() {
-
+ShipPosition::ShipPosition() : startPosition(), endPosition() {
+	this->ship = new Ship();
 }
 
 ShipPosition::ShipPosition(Ship *ship, std::string &startPosition, std::string &endPosition) : ship(ship), startPosition(startPosition), endPosition(endPosition) {

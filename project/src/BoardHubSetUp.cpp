@@ -58,17 +58,6 @@ void BoardHubSetUp::printAvailableShips() {
 }
 
 void split(std::vector<std::string> &tokens, std::string input) {
-	/*std::string delimiter = " ";
-
-	size_t pos = 0;
-	std::string token;
-	while ((pos = input.find(delimiter)) != std::string::npos) {
-		token = input.substr(0, pos);
-		tokens.push_back(token);
-		std::cout << token << std::endl;
-		input.erase(0, pos + delimiter.length());
-	}*/
-
 	std::istringstream iss(input);
 	tokens = std::vector<std::string>(std::istream_iterator<std::string>{iss}, std::istream_iterator<std::string>());
 }
@@ -78,10 +67,10 @@ void BoardHubSetUp::executeCommand(std::string command) {
 	split(argv, command);
 
 	if (controlPanel->isPlaceShipAction(command)) {
-		Ship *ship = getShip(argv[1]); // Get a ship whit this ship type.
+		Ship *ship = getShip(argv[1]); // Get a ship with this ship type.
 		PlaceShip placeShip(controlPanel, this->boardHub, ship, argv[2], argv[3]);
 		if (placeShip.execute()) {
-			ships.insert(std::make_pair(ship, true)); // If the ship was placed on the map then it is added to ships.
+			ships.find(ship)->second = true;	 // If the ship was placed on the map then it is added to ships.
 		}
 	}
 	else if (controlPanel->isMoveShipAction(command)) {
@@ -91,6 +80,10 @@ void BoardHubSetUp::executeCommand(std::string command) {
 	else {
 		std::cout << INVALID_COMMAND << std::endl;
 	}
+}
+
+void BoardHubSetUp::execute(std::string command) {
+	executeCommand(command);
 }
 
 Ship* BoardHubSetUp::getShip(std::string shipType) {
