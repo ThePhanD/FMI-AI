@@ -1,6 +1,7 @@
 #pragma once
 
 #include "BoardHubSetUp.h"
+#include "ProbabilityDensityAlg.h"
 
 const std::string LAST_TURN = "Opponent last turn: ";
 
@@ -13,8 +14,11 @@ private:
 	std::string playerOneLastTurn;
 	std::string playerTwoLastTurn;
 
+	ProbabilityDensityAlg *probDensityAlg;
+
 	void setUpBoardHubPlayerOne();
 	void setUpBoardHubPlayerTwo();
+	void setUpBoardHubAi(int playerNumber, std::vector<std::string> commands);
 	void printMenu();
 	bool isGameOver();
 	void showPlayerOneGameResult();
@@ -25,12 +29,15 @@ private:
 	std::string executeTurn(std::string turn, bool isPlayerOne);
 	std::string executePlayerOneTurn();
 	std::string executePlayerTwoTurn();
+	std::string executeAITurn(std::pair<int, int> pos);
 	void startGame();
+	void startGameWithOneAi();
 
 public:
 	GameApi();
 	~GameApi();
 	
 	void run();
+	void runWithOneAiProbabilityDensityAlg();
 };
 

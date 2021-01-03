@@ -10,6 +10,19 @@ void GameApi::setUpBoardHubPlayerTwo() {
 	playerTwoHub = setup.initBoardHub();
 }
 
+void GameApi::setUpBoardHubAi(int playerNumber, std::vector<std::string> commands) {
+	BoardHubSetUp setup;
+	for (std::string command : commands)
+		setup.execute(command);
+
+	if (playerNumber == 1) {
+		playerOneHub = setup.getBoardHub();
+	}
+	else {
+		playerTwoHub = setup.getBoardHub();
+	}
+}
+
 void GameApi::printMenu() {
 	std::cout << std::endl;
 	printf("| %-32s |\n", "MENU");
@@ -73,10 +86,10 @@ std::string GameApi::executeAttackUtility(BoardHub *boardHub, int playerNumber, 
 std::string GameApi::executeTurn(std::string turn, bool isPlayerOne) {
 	if (controlPanel->isAttackAction(turn)) {
 		if (isPlayerOne) {
-			return executeAttackUtility(playerTwoHub, 2, turn);
+			return executeAttackUtility(playerTwoHub, 1, turn);
 		}
 
-		return executeAttackUtility(playerOneHub, 1, turn);
+		return executeAttackUtility(playerOneHub, 2, turn);
 	}
 	else {
 		return INVALID_COMMAND;
@@ -148,7 +161,7 @@ void GameApi::startGame() {
 		}
 
 		if (!message.compare("QUIT")) { // When player One left the game by typing <quit>
-			std::cout << "You surrender!" << std::endl; // Receive player Two last request
+			std::cout << "You surrender!" << std::endl;
 			std::cout << "The opponent won the game!" << std::endl;
 			break;
 		}
@@ -159,7 +172,7 @@ void GameApi::startGame() {
 		}
 
 		if (!inputLine.compare("QUIT")) { // When player Two left the game by typing <quit>
-			std::cout << "You won the game!" << std::endl; // Receive player One last request
+			std::cout << "You won the game!" << std::endl; 
 			std::cout << "The opponent surrender!" << std::endl;
 			break;
 		}
@@ -183,4 +196,83 @@ void GameApi::run() {
 	setUpBoardHubPlayerTwo();
 
 	startGame();
+}
+
+void createAiOneShipPlacement(std::vector<std::string> &commands) {
+	commands.push_back("place carrier A9 E9");
+	commands.push_back("place cruiser F2 F5");
+	commands.push_back("place cruiser C6 F6");
+	commands.push_back("place destroyer F10 H10");
+	commands.push_back("place destroyer A2 A4");
+	commands.push_back("place destroyer I5 I7");
+	commands.push_back("place submarine G1 G2");
+	commands.push_back("place submarine D3 E3");
+	commands.push_back("place submarine I2 J2");
+	commands.push_back("place submarine A5 A6");
+}
+
+void GameApi::runWithOneAiProbabilityDensityAlg() {
+	setUpBoardHubPlayerOne();
+
+	std::vector<std::string> commands;
+	createAiOneShipPlacement(commands);
+	setUpBoardHubAi(2, commands);
+	probDensityAlg = new ProbabilityDensityAlg(playerOneHub);
+
+	startGameWithOneAi();
+}
+
+std::string convecrtToString(std::pair<int, int> pos) {
+	char c = (char)('A' + pos.first);
+	std::string str = "attack ";
+	str.push_back(c);
+	str += std::to_string(pos.second + 1);
+	return str;
+}
+
+std::string GameApi::executeAITurn(std::pair<int, int> pos) {
+	
+	std::string command = convecrtToString(pos);
+
+	std::string message = executeTurn(command, false);
+	if (isGameOver()) {
+		updatePlayers();
+		return "QUIT";
+	}
+
+	std::transform(message.begin(), message.end(), message.begin(), ::toupper);
+	return message;
+}
+
+void GameApi::startGameWithOneAi() {
+	while (true) {
+		printMenu();
+		showPlayerOneGameResult(); // Show player One game result
+		std::string message = executePlayerOneTurn(); // Player One turn
+		if (isGameOver()) {
+			break;
+		}
+
+		if (!message.compare("QUIT")) { // When player One left the game by typing <quit>
+			std::cout << "You surrender!" << std::endl;
+			std::cout << "The opponent won the game!" << std::endl;
+			break;
+		}
+
+		// AI turn
+		std::pair<int, int> pos = probDensityAlg->getPosition(playerOneHub);
+		std::string inputLine = executeAITurn(pos);
+		char** board = playerOneHub->getBoardEngine()->getHiddenBoard();
+		probDensityAlg->setHitFlag(board[pos.first][pos.second] == HIT_SHIP_FIELD);
+
+		if (isGameOver()) {
+			break;
+		}
+
+		if (!inputLine.compare("QUIT")) { 
+			std::cout << "You won the game!" << std::endl;
+			std::cout << "The opponent surrender!" << std::endl;
+			break;
+		}
+	}
 }
