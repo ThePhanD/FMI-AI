@@ -28,6 +28,7 @@ bool BoardHub::changeShipToNewPosition(const ShipPosition &oldShipPosition, std:
 
 			//If the ship can't be placed to the new position then it is placed to the old position.
 			modifyShipPosition(oldShipPosition, false);
+			changeShipAvailableNumber(ship, true);	// Reduce the count of this shipType
 			return false;
 		}
 		return true;
@@ -65,7 +66,7 @@ bool BoardHub::isShipAvailable(Ship *ship) {
 	ShipType shipType = ship->getShipType();
 	int shipNumber = getShipAvailableNumber(shipType);
 
-	// If the limit of this ship type is reached throw ShipUnavailableException.
+	// Check for available shipType
 	if (shipNumber == 0) {
 		std::cerr << SHIP_UNAVAILABLE << std::endl;
 		return false;

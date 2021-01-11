@@ -2,8 +2,7 @@
 
 void BoardHubSetUp::createShips(ShipType shipType, int maxShipType) {
 	ShipFactory factory;
-	int zero = 0;
-	for (int i = zero; i < maxShipType; ++i) {
+	for (int i = ZERO; i < maxShipType; ++i) {
 		Ship *ship = factory.buildShip(shipType);
 		ships.insert(std::make_pair(ship, false));
 	}
@@ -67,7 +66,7 @@ void BoardHubSetUp::executeCommand(std::string command) {
 	split(argv, command);
 
 	if (controlPanel->isPlaceShipAction(command)) {
-		Ship *ship = getShip(argv[1]); // Get a ship with this ship type.
+		Ship *ship = getShip(argv[1]);	// Get a ship with this ship type.
 		PlaceShip placeShip(controlPanel, this->boardHub, ship, argv[2], argv[3]);
 		if (placeShip.execute()) {
 			ships.find(ship)->second = true;	 // If the ship was placed on the map then it is added to ships.
@@ -126,10 +125,10 @@ void BoardHubSetUp::updateShipAvailableCount() {
 
 bool BoardHubSetUp::isShipAvailable() {
 	updateShipAvailableCount();
-	return carrierCount > 0
-		|| cruiserCount > 0
-		|| destroyerCount > 0
-		|| submarineCount > 0;
+	return carrierCount > ZERO
+		|| cruiserCount > ZERO
+		|| destroyerCount > ZERO
+		|| submarineCount > ZERO;
 }
 
 BoardHubSetUp::BoardHubSetUp() {
@@ -140,7 +139,6 @@ BoardHubSetUp::BoardHubSetUp() {
 }
 
 BoardHubSetUp::~BoardHubSetUp() {
-	//delete boardHub;
 	delete controlPanel;
 	ships.clear();
 }

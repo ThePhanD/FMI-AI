@@ -1,19 +1,9 @@
 #pragma once
 
 #include "BoardHub.h"
-#include <string>
+#include "Constants.h"
 #include <iterator>
 #include <sstream>
-
-const std::string MOVE = "move";
-const std::string PLACE = "place";
-const std::string ATTACK = "attack";
-
-const int PLACE_ARG_COUNT = 4;
-const int MOVE_ARG_COUNT = 4;
-const int ATTACK_ARG_COUNT = 2;
-
-const int ACTION_NAME = 0;
 
 class ControlPanel
 {

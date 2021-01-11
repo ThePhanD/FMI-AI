@@ -1,11 +1,9 @@
 #pragma once
 
-#include <map>
-#include <stdio.h>
 #include "ShipFactory.h"
 #include "Action.h"
-
-const std::string INVALID_COMMAND = "INVALID COMMAND";
+#include <map>
+#include <stdio.h>
 
 class BoardHubSetUp
 {

@@ -1,13 +1,7 @@
 #pragma once
-#include <string>
+
+#include "Constants.h"
 #include <iostream>
-
-const std::string INCORRECT_BOARD = "The board can't be null!";
-const std::string INIT_DEFAULT_BOARD = "The board couldn't be copied.\nA default board was created.";
-const char INCORRECT_FIELD = '#';
-
-const int ZERO = 0;
-const int TEN = 10;
 
 class Board
 {

@@ -1,12 +1,7 @@
 #pragma once
-#include <string>
+#include "Constants.h"
 #include <algorithm>
 #include <iostream>
-
-const std::string INCORRECT_COORDINATES = "The coordinates must be between row A to J, and between col 1 to 10!";
-const char START_POSITION = 'A';
-const int ROW = 0;
-const int COL = 1;
 
 class Position
 {

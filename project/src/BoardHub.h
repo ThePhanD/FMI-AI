@@ -1,15 +1,8 @@
 #pragma once
 
-#include <vector>
-#include <algorithm>
 #include "ShipPosition.h"
 #include "BoardEngine.h"
-
-const std::string SHIP_UNREPAIRABLE = "The ship can't be repaired!";
-const std::string SHIP_UNCHANGEABLE = "The ship can't change his position!";
-const std::string SHIP_UNAVAILABLE = "This type of ship can't be placed anymore!";
-const std::string SHIP_NOT_EXIST = "This ship doesn't exist!";
-const std::string CHANGE_SHIP = "Please choose a different ship!";
+#include <vector>
 
 class BoardHub
 {

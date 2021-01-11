@@ -6,6 +6,9 @@ void ControlPanel::getTokens(std::vector<std::string> &tokens, std::string input
 }
 
 bool iequals(const std::string &a, const std::string &b) {
+	if (a.length() != b.length())
+		return false;
+
 	return std::equal(a.begin(), a.end(), b.begin(),
 		[](char a, char b) {
 		return tolower(a) == tolower(b);

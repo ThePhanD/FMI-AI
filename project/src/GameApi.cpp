@@ -104,7 +104,7 @@ void GameApi::updatePlayers() {
 	}
 	else if (playerTwoHub->isGameOver()) { // Plyaer two lost the game
 		showPlayerOneGameResult();
-		std::cout << "The opponet the game!" << std::endl;
+		std::cout << "The opponet lost the game!" << std::endl;
 		std::cout << "You won the game!" << std::endl;
 	}
 }

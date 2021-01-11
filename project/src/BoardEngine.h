@@ -1,18 +1,8 @@
 #pragma once
 
-#include <algorithm>
 #include "Board.h"
 #include "Ship.h"
-
-const std::string FIELD_INTERRUPTION = "The chosen field is interrupted!";
-const std::string FIELD_ALREADY_DESTROYED = "The chosen field is already destroyed, choose another one!";
-const std::string INCORRECT_SHIP_FIELD = "The chosen field isn't correct size for the ship!";
-const std::string INCORRECT_COORDINATESS = "The coordinates must be between row A to J and between col 1 to 10!";
-
-const char EMPTY_FIELD = '-';
-const char SHIP_FIELD = '*';
-const char HIT_SHIP_FIELD = 'X';
-const char HIT_EMPTY_FIELD = 'O';
+#include <algorithm>
 
 class BoardEngine
 {

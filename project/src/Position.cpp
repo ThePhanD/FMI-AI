@@ -2,7 +2,6 @@
 
 int Position::getRowIndex(char &row) {
 	if ('A' > row || row > 'J') {
-		std::cerr << INCORRECT_COORDINATES << std::endl;;
 		return -1;
 	}
 
@@ -13,7 +12,6 @@ int Position::getColIndex(std::string &col) {
 	int startPosition = 1;
 	int colIndex = atoi(col.c_str()) - startPosition;
 	if (0 > colIndex || colIndex > 9) {
-		std::cerr << INCORRECT_COORDINATES << std::endl;;
 		return -1;
 	}
 

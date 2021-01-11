@@ -1,10 +1,9 @@
 #include "Board.h"
 
 void Board::fillBoard() {
-	char emptySpace = '-';
 	for (int i = ZERO; i < TEN; ++i) {
 		for (int j = ZERO; j < TEN; ++j)
-			board[i][j] = emptySpace;
+			board[i][j] = EMPTY_FIELD;
 	}
 }
 
@@ -35,13 +34,11 @@ char** Board::hideShips() {
 		newBoard[i] = new char[TEN];
 
 	copyBoard(getBoard(), newBoard);
-	char shipField = '*';
-	char emptyField = '-';
 
 	for (int i = ZERO; i < TEN; ++i) {
 		for (int j = ZERO; j < TEN; ++j) {
-			if (newBoard[i][j] == shipField) {
-				newBoard[i][j] = emptyField;
+			if (newBoard[i][j] == SHIP_FIELD) {
+				newBoard[i][j] = EMPTY_FIELD;
 			}
 		}
 	}

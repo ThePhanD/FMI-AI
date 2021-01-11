@@ -3,8 +3,6 @@
 #include "BoardHubSetUp.h"
 #include "ProbabilityDensityAlg.h"
 
-const std::string LAST_TURN = "Opponent last turn: ";
-
 class GameApi
 {
 private:

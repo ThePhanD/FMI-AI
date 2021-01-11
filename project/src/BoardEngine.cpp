@@ -52,8 +52,7 @@ bool BoardEngine::isCoordinatesCorrect(const int &row, const int &col) {
 			return true;
 		}
 	}
-
-	std::cerr << INCORRECT_COORDINATESS << std::endl;
+	std::cerr << INCORRECT_COORDINATES << std::endl;
 	return false;
 }
 
@@ -61,8 +60,10 @@ bool BoardEngine::isPositionCoordinatesCorrect(const int &rowX, const int &colX,
 	bool flagX = isCoordinatesCorrect(rowX, colX);
 	bool flagY = isCoordinatesCorrect(rowY, colY);
 
-	if (!flagX || !flagY)
+	if (!flagX || !flagY) {
+		std::cerr << INCORRECT_COORDINATES << std::endl;
 		return false;
+	}
 
 	if (rowX == rowY) {
 		int fieldSize = std::abs(colX - colY);
@@ -152,9 +153,11 @@ bool BoardEngine::fireAtPosition(const int &row, const int &col) {
 
 		if (fieldAt == SHIP_FIELD) {
 			setField(row, col, col, true, HIT_SHIP_FIELD);
+			return true;
 		}
 		else if (fieldAt == EMPTY_FIELD) {
 			setField(row, col, col, true, HIT_EMPTY_FIELD);
+			return true;
 		}
 		else {
 			std::cerr << FIELD_ALREADY_DESTROYED << std::endl;
@@ -162,7 +165,7 @@ bool BoardEngine::fireAtPosition(const int &row, const int &col) {
 			return false;
 		}
 	}
-	return true;
+	return false;
 }
 
 bool BoardEngine::placeAtPosition(const int &row, const int &col, const char &symbol) {

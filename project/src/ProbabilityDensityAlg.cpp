@@ -36,7 +36,7 @@ std::vector<std::vector<int>> ProbabilityDensityAlg::calculateDensity() {
 				if (isHorizontal(i, j, shipSize)) {
 					int k = j;
 					for (int l = 0; l < shipSize; l++) {
-						calcBoard[i][k] += LOW_PROBABILITY;
+						calcBoard[i][k] += ship->getSize(); // LOW_PROBABILITY;
 						k++;
 					}
 				}
@@ -120,15 +120,6 @@ void ProbabilityDensityAlg::calcDensityDestroyMode() {
 	char **board = boardHub->getBoardEngine()->getHiddenBoard();
 	int chance = HIGH_PROBABILITY;
 
-	// Vertical Up
-	/*for (int i = row - 1; i >= 0; --i) {
-		if (board[i][col] != EMPTY_FIELD)
-			break;
-
-		densityBoard[i][col] += (chance - hitHorizontal);
-		chance -= 5;
-	}*/
-
 	int cnt = 0;
 	int i = row - 1;
 	while (cnt < maxShipSize && i >= 0) {
@@ -144,15 +135,6 @@ void ProbabilityDensityAlg::calcDensityDestroyMode() {
 	chance = HIGH_PROBABILITY;
 	cnt = 0;
 	i = row + 1;
-	// Vertical Down
-	/*for (int i = row + 1; i < TEN; ++i) {
-		if (board[i][col] != EMPTY_FIELD)
-			break;
-
-		densityBoard[i][col] += (chance - hitHorizontal);
-		chance -= 5;
-	}*/
-
 	while (cnt < maxShipSize && i < TEN) {
 		if (board[i][col] != EMPTY_FIELD)
 			break;
@@ -166,15 +148,6 @@ void ProbabilityDensityAlg::calcDensityDestroyMode() {
 	chance = HIGH_PROBABILITY;
 	cnt = 0;
 	i = col - 1;
-	// Horizontal Left
-	/*for (int i = col - 1; i >= 0; --i) {
-		if (board[row][i] != EMPTY_FIELD)
-			break;
-
-		densityBoard[row][i] += (chance - hitVertical);
-		chance -= 5;
-	}*/
-
 	while (cnt < maxShipSize && i >= 0) {
 		if (board[row][i] != EMPTY_FIELD)
 			break;
@@ -189,14 +162,6 @@ void ProbabilityDensityAlg::calcDensityDestroyMode() {
 	cnt = 0;
 	i = col + 1;
 	// Horizontal Right
-	/*for (int i = col + 1; i < TEN; ++i) {
-		if (board[row][i] != EMPTY_FIELD)
-			break;
-
-		densityBoard[row][i] += (chance - hitVertical);
-		chance -= 5;
-	}*/
-
 	while (cnt < maxShipSize && i < TEN) {
 		if (board[row][i] != EMPTY_FIELD)
 			break;
@@ -211,7 +176,7 @@ void ProbabilityDensityAlg::calcDensityDestroyMode() {
 void ProbabilityDensityAlg::initDestroyMode() {
 	int row = lastPredicPosisition.first;
 	int col = lastPredicPosisition.second;
-	densityBoard[row][col] = 0;
+	densityBoard[row][col] = ZERO;
 	calcDensityDestroyMode();
 	initBestPosition();
 }
@@ -220,12 +185,12 @@ std::pair<int, int> ProbabilityDensityAlg::getHighestProbabilityPos() {
 	int idx = rand() % possiblePositions.size();
 	lastPredicPosisition = possiblePositions[idx];
 	possiblePositions.erase(possiblePositions.begin() + idx);
-	densityBoard[lastPredicPosisition.first][lastPredicPosisition.second] = 0;
+	densityBoard[lastPredicPosisition.first][lastPredicPosisition.second] = ZERO;
 	return lastPredicPosisition;
 }
 
 std::pair<int, int> ProbabilityDensityAlg::getPosition(BoardHub *boardHub) {
-	if (boardHub->getShips().size() == 0)
+	if (boardHub->getShips().size() == ZERO)
 		return std::make_pair(-1, -1);
 
 	this->boardHub = boardHub;
@@ -252,30 +217,16 @@ std::pair<int, int> ProbabilityDensityAlg::getPosition(BoardHub *boardHub) {
 
 		if (hitFlag) {
 			initDestroyMode();
-			std::cout << std::endl;
-			std::cout << "Destroy Mode" << std::endl;
-			std::cout << "number of ships: " << shipNumber << std::endl;
-			for (int i = 0; i < TEN; ++i) {
-				for (int j = 0; j < TEN; ++j)
-					std::cout << densityBoard[i][j] << " ";
 
-				std::cout << std::endl;
-			}
-			std::cout << "========================================" << std::endl;
+			printDensityBoard();
+
 			return getHighestProbabilityPos();
 		}
 
 		initBestPosition();
-		std::cout << std::endl;
-		std::cout << "Destroy Mode" << std::endl;
-		std::cout << "number of ships: " << shipNumber << std::endl;
-		for (int i = 0; i < TEN; ++i) {
-			for (int j = 0; j < TEN; ++j)
-				std::cout << densityBoard[i][j] << " ";
 
-			std::cout << std::endl;
-		}
-		std::cout << "========================================" << std::endl;
+		printDensityBoard();
+
 		return getHighestProbabilityPos();
 	}
 	else {
@@ -286,15 +237,7 @@ std::pair<int, int> ProbabilityDensityAlg::getPosition(BoardHub *boardHub) {
 		this->densityBoard = calculateDensity();
 		initBestPosition();
 
-		std::cout << std::endl;
-		std::cout << "Hunt Mode" << std::endl;
-		for (int i = 0; i < TEN; ++i) {
-			for (int j = 0; j < TEN; ++j)
-				std::cout << densityBoard[i][j] << " ";
-
-			std::cout << std::endl;
-		}
-		std::cout << "========================================" << std::endl;
+		printDensityBoard();
 
 		return getHighestProbabilityPos();
 	}
@@ -321,20 +264,29 @@ void ProbabilityDensityAlg::checkOrient() {
 	int row = lastPredicPosisition.first;
 	int col = lastPredicPosisition.second;
 
+	// Up
 	if (row - 1 >= 0 && board[row - 1][col] == HIT_SHIP_FIELD) {
 		hitVertical++;
+		if (row - 2 >= 0 && board[row - 2][col] == EMPTY_FIELD)
+			densityBoard[row - 2][col] += HIGH_PROBABILITY;
 	}
-
-	if (row + 1 <= 9 && board[row + 1][col] == HIT_SHIP_FIELD) {
+	// Down
+	else if (row + 1 <= 9 && board[row + 1][col] == HIT_SHIP_FIELD) {
 		hitVertical++;
+		if (row + 2 <= 9 && board[row + 2][col] == EMPTY_FIELD)
+			densityBoard[row + 2][col] += HIGH_PROBABILITY;
 	}
-
-	if (col - 1 >= 0 && board[row][col - 1] == HIT_SHIP_FIELD) {
+	// Left
+	else if (col - 1 >= 0 && board[row][col - 1] == HIT_SHIP_FIELD) {
 		hitHorizontal++;
+		if (col - 2 >= 0 && board[row][col - 2] == EMPTY_FIELD)
+			densityBoard[row][col - 2] += HIGH_PROBABILITY;
 	}
-
-	if (col + 1 <= 9 && board[row][col + 1] == HIT_SHIP_FIELD) {
+	// Right
+	else if (col + 1 <= 9 && board[row][col + 1] == HIT_SHIP_FIELD) {
 		hitHorizontal++;
+		if (col + 2 <= 9 && board[row][col + 2] == EMPTY_FIELD)
+			densityBoard[row][col + 2] += HIGH_PROBABILITY;
 	}
 }
 
@@ -412,9 +364,9 @@ bool ProbabilityDensityAlg::checkHitShipButNotSink() {
 		for (int j = 0; j < TEN; j++) {
 			if (board[i][j] == HIT_SHIP_FIELD) {
 				flag = true;
-				int value = HIGH_PROBABILITY;
+				int value = 2 * HIGH_PROBABILITY;
 				for (int k = i + 1; k < TEN; k++) {
-					if (board[k][j] == HIT_EMPTY_FIELD)
+					if (board[k][j] != EMPTY_FIELD)
 						break;
 
 					if (k < TEN && board[k][j] == EMPTY_FIELD) {
@@ -423,9 +375,9 @@ bool ProbabilityDensityAlg::checkHitShipButNotSink() {
 					}
 				}
 
-				value = HIGH_PROBABILITY;
+				value = 2 * HIGH_PROBABILITY;
 				for (int k = i - 1; k >= 0; k--) {
-					if (board[k][j] == HIT_EMPTY_FIELD)
+					if (board[k][j] != EMPTY_FIELD)
 						break;
 
 					if (k >= 0 && board[k][j] == EMPTY_FIELD) {
@@ -434,9 +386,9 @@ bool ProbabilityDensityAlg::checkHitShipButNotSink() {
 					}
 				}
 
-				value = HIGH_PROBABILITY;
+				value = 2 * HIGH_PROBABILITY;
 				for (int k = j + 1; k < TEN; k++) {
-					if (board[i][k] == HIT_EMPTY_FIELD)
+					if (board[i][k] != EMPTY_FIELD)
 						break;
 
 					if (k < TEN && board[i][k] == EMPTY_FIELD) {
@@ -445,9 +397,9 @@ bool ProbabilityDensityAlg::checkHitShipButNotSink() {
 					}
 				}
 
-				value = HIGH_PROBABILITY;
+				value = 2 * HIGH_PROBABILITY;
 				for (int k = j - 1; k >= 0; k--) {
-					if (board[i][k] == HIT_EMPTY_FIELD)
+					if (board[i][k] != EMPTY_FIELD)
 						break;
 
 					if (k >= 0 && board[i][k] == EMPTY_FIELD) {
@@ -502,6 +454,17 @@ void ProbabilityDensityAlg::checkHitDensity() {
 			if (row + 1 < TEN && col + 1 < TEN)
 				densityBoard[row + 1][col + 1] -= 5;
 		}
-		
 	}
+}
+
+void ProbabilityDensityAlg::printDensityBoard() const {
+	std::cout << std::endl;
+	std::cout << "Hunt Mode" << std::endl;
+	for (int i = 0; i < TEN; ++i) {
+		for (int j = 0; j < TEN; ++j)
+			std::cout << densityBoard[i][j] << " ";
+
+		std::cout << std::endl;
+	}
+	std::cout << "========================================" << std::endl;
 }

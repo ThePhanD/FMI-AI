@@ -1,12 +1,9 @@
 #pragma once
 
+#include "BoardHub.h"
 #include <utility> 
 #include <time.h>
-#include<cstdlib>
-#include "BoardHub.h"
-
-const int LOW_PROBABILITY = 1;
-const int HIGH_PROBABILITY = 50;
+#include <cstdlib>
 
 class ProbabilityDensityAlg
 {
@@ -42,5 +39,6 @@ public:
 
 	std::pair<int, int> getPosition(BoardHub *boardHub);
 	void setHitFlag(bool hitFlag);
+	void printDensityBoard() const;
 };
 
