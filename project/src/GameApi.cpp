@@ -181,8 +181,8 @@ void GameApi::startGame() {
 
 GameApi::GameApi() {
 	controlPanel = new ControlPanel();
-	playerOneLastTurn = "None";
-	playerTwoLastTurn = "None";
+	playerOneLastTurn = LAST_TURN + "None";
+	playerTwoLastTurn = LAST_TURN + "None";
 }
 
 GameApi::~GameApi() {

@@ -459,10 +459,13 @@ void ProbabilityDensityAlg::checkHitDensity() {
 
 void ProbabilityDensityAlg::printDensityBoard() const {
 	std::cout << std::endl;
-	std::cout << "Hunt Mode" << std::endl;
+	if(destroyMode)
+		std::cout << "Destroy Mode" << std::endl;
+	else
+		std::cout << "Hunt Mode" << std::endl;
 	for (int i = 0; i < TEN; ++i) {
 		for (int j = 0; j < TEN; ++j)
-			std::cout << densityBoard[i][j] << " ";
+			std::cout << std::setw(3) << densityBoard[i][j] << " ";
 
 		std::cout << std::endl;
 	}

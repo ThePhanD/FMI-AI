@@ -4,6 +4,7 @@
 #include <utility> 
 #include <time.h>
 #include <cstdlib>
+#include <iomanip>
 
 class ProbabilityDensityAlg
 {
