@@ -56,7 +56,7 @@ void GameApi::showPlayerTwoGameResult() {
 	std::cout << playerTwoLastTurn << std::endl;
 }
 
-void splitToTokens(std::vector<std::string> &tokens, std::string input) {
+void splitToTokens(std::vector<std::string>& tokens, std::string input) {
 	std::istringstream iss(input);
 	tokens = std::vector<std::string>(std::istream_iterator<std::string>{iss}, std::istream_iterator<std::string>());
 }
@@ -71,7 +71,7 @@ std::string GameApi::updateLastTurn(int playerNumber, std::string lastTurn) {
 	return LAST_TURN + lastTurn;
 }
 
-std::string GameApi::executeAttackUtility(BoardHub *boardHub, int playerNumber, std::string turn) {
+std::string GameApi::executeAttackUtility(BoardHub* boardHub, int playerNumber, std::string turn) {
 	std::vector<std::string> argv;
 	splitToTokens(argv, turn);
 	Attack attack(controlPanel, boardHub, argv[1]);
@@ -96,7 +96,7 @@ std::string GameApi::executeTurn(std::string turn, bool isPlayerOne) {
 	}
 }
 
-void GameApi::updatePlayers(){	
+void GameApi::updatePlayers() {
 	if (playerOneHub->isGameOver()) {			// Player one lost the game
 		showPlayerOneGameResult();
 		std::cout << "The opponet won the game!" << std::endl;
@@ -172,7 +172,7 @@ void GameApi::startGame() {
 		}
 
 		if (!inputLine.compare("QUIT")) {				// When player Two left the game by typing <quit>
-			std::cout << "You won the game!" << std::endl; 
+			std::cout << "You won the game!" << std::endl;
 			std::cout << "The opponent surrender!" << std::endl;
 			break;
 		}
@@ -212,7 +212,7 @@ void GameApi::run() {
 		switch (option) {
 		case 1: runWithTwoPlayer();
 			return;
-		case 2:
+		case 2: runWithHuntAndParityAlg();
 			return;
 		case 3: runWithOneAiProbabilityDensityAlg();
 			return;
@@ -231,7 +231,7 @@ void GameApi::runWithTwoPlayer() {
 	startGame();
 }
 
-void createAiOneShipPlacement(std::vector<std::string> &commands) {
+void createAiOneShipPlacement(std::vector<std::string>& commands) {
 	commands.push_back("place carrier A9 E9");
 	commands.push_back("place cruiser F2 F5");
 	commands.push_back("place cruiser C6 F6");
@@ -252,7 +252,21 @@ void GameApi::runWithOneAiProbabilityDensityAlg() {
 	setUpBoardHubAi(2, commands);
 	probDensityAlg = new ProbabilityDensityAlg(playerOneHub);
 
-	startGameWithOneAi();
+	startGameWithOneAi(RUNWITHPROBABLITYALG);
+}
+
+void GameApi::runWithHuntAndParityAlg() {
+	setUpBoardHubPlayerOne();
+
+	std::vector<std::string> commands;
+	createAiOneShipPlacement(commands);
+	setUpBoardHubAi(2, commands);
+
+	huntAndParityAlg = new HuntAndParityAlg(playerOneHub);
+	huntAndParityAlg->addTargetsToShootAt(playerOneHub);
+
+	startGameWithOneAi(RUNWITHHUNTPARITY);
+
 }
 
 std::string convecrtToString(std::pair<int, int> pos) {
@@ -264,7 +278,7 @@ std::string convecrtToString(std::pair<int, int> pos) {
 }
 
 std::string GameApi::executeAITurn(std::pair<int, int> pos) {
-	
+
 	std::string command = convecrtToString(pos);
 
 	std::string message = executeTurn(command, false);
@@ -284,7 +298,7 @@ void GameApi::deleteHiddenBoard(char** hiddenBoard) {
 	delete[] hiddenBoard;
 }
 
-void GameApi::startGameWithOneAi() {
+void GameApi::startGameWithOneAi(int option) {
 	while (true) {
 		printMenu();
 		showPlayerOneGameResult();						// Show player One game result
@@ -292,7 +306,7 @@ void GameApi::startGameWithOneAi() {
 		if (isGameOver()) {
 			break;
 		}
-		
+
 		if (!message.compare("QUIT")) {					// When player One left the game by typing <quit>
 			std::cout << "You surrender!" << std::endl;
 			std::cout << "The opponent won the game!" << std::endl;
@@ -300,17 +314,29 @@ void GameApi::startGameWithOneAi() {
 		}
 
 		// AI turn
-		std::pair<int, int> pos = probDensityAlg->getPosition(playerOneHub);
-		std::string inputLine = executeAITurn(pos);
-		char** board = playerOneHub->getBoardEngine()->getHiddenBoard();
-		probDensityAlg->setHitFlag(board[pos.first][pos.second] == HIT_SHIP_FIELD);
-		deleteHiddenBoard(board);
+		std::pair<int, int> pos;
+		if (option == RUNWITHPROBABLITYALG) {
+			 pos = probDensityAlg->getPosition(playerOneHub);
+		}
+		else if(option == RUNWITHHUNTPARITY){
+			 pos = huntAndParityAlg->getPosition(playerOneHub);
+		}
+			std::string inputLine = executeAITurn(pos);
+			char** board = playerOneHub->getBoardEngine()->getHiddenBoard();
+		if (option == RUNWITHPROBABLITYALG) {
+			probDensityAlg->setHitFlag(board[pos.first][pos.second] == HIT_SHIP_FIELD);
+		}
+			else if(option == RUNWITHHUNTPARITY){
+			huntAndParityAlg->setHitFlag(board[pos.first][pos.second] == HIT_SHIP_FIELD);
+		}
+			deleteHiddenBoard(board);
+
 
 		if (isGameOver()) {
 			break;
 		}
 
-		if (!inputLine.compare("QUIT")) { 
+		if (!inputLine.compare("QUIT")) {
 			std::cout << "You won the game!" << std::endl;
 			std::cout << "The opponent surrender!" << std::endl;
 			break;

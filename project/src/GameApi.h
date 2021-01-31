@@ -2,17 +2,19 @@
 
 #include "BoardHubSetUp.h"
 #include "ProbabilityDensityAlg.h"
+#include "HuntAndParityAlg.h"
 
 class GameApi
 {
 private:
-	ControlPanel *controlPanel;
-	BoardHub *playerOneHub;
-	BoardHub *playerTwoHub;
+	ControlPanel* controlPanel;
+	BoardHub* playerOneHub;
+	BoardHub* playerTwoHub;
 	std::string playerOneLastTurn;
 	std::string playerTwoLastTurn;
 
-	ProbabilityDensityAlg *probDensityAlg;
+	ProbabilityDensityAlg* probDensityAlg;
+	HuntAndParityAlg* huntAndParityAlg;
 
 	void deleteHiddenBoard(char** hiddenBoard);
 	void setUpBoardHubPlayerOne();
@@ -24,22 +26,22 @@ private:
 	void showPlayerOneGameResult();
 	void showPlayerTwoGameResult();
 	void updatePlayers();
-	std::string executeAttackUtility(BoardHub *boardHub, int playerNumber, std::string turn);
+	std::string executeAttackUtility(BoardHub* boardHub, int playerNumber, std::string turn);
 	std::string updateLastTurn(int playerNumber, std::string lastTurn);
 	std::string executeTurn(std::string turn, bool isPlayerOne);
 	std::string executePlayerOneTurn();
 	std::string executePlayerTwoTurn();
 	std::string executeAITurn(std::pair<int, int> pos);
 	void startGame();
-	void startGameWithOneAi();
+	void startGameWithOneAi(int option);
 
 	void runWithTwoPlayer();
 	void runWithOneAiProbabilityDensityAlg();
+	void runWithHuntAndParityAlg();
 
 public:
 	GameApi();
 	~GameApi();
-	
+
 	void run();
 };
-
