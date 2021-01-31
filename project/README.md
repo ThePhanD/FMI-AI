@@ -2,6 +2,6 @@
 
 AI | Working |
 :------------ | :-------------|
-Probability Density Algirthm | :heavy_check_mark: |
-Hunt + Parity Algirthm | :x: |
-Reinforcement Learning Algirthm | :x: |
+Probability Density Algorithm | :heavy_check_mark: |
+Hunt + Parity Algorithm | :x: |
+Reinforcement Learning Algorithm | :x: |
