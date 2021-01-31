@@ -66,10 +66,10 @@ void BoardHubSetUp::executeCommand(std::string command) {
 	split(argv, command);
 
 	if (controlPanel->isPlaceShipAction(command)) {
-		Ship *ship = getShip(argv[1]);	// Get a ship with this ship type.
+		Ship *ship = getShip(argv[1]);				// Get a ship with this ship type.
 		PlaceShip placeShip(controlPanel, this->boardHub, ship, argv[2], argv[3]);
 		if (placeShip.execute()) {
-			ships.find(ship)->second = true;	 // If the ship was placed on the map then it is added to ships.
+			ships.find(ship)->second = true;		// If the ship was placed on the map then it is added to ships.
 		}
 	}
 	else if (controlPanel->isMoveShipAction(command)) {
@@ -91,12 +91,12 @@ Ship* BoardHubSetUp::getShip(std::string shipType) {
 	for (std::pair<Ship*, bool> ship : ships) {
 		ShipType actualType = ship.first->getShipType();
 
-		bool isNotAvailable = ship.second; // Continue if the ship isn't available.
+		bool isNotAvailable = ship.second;	// Continue if the ship isn't available.
 		if (isNotAvailable) {
 			continue;
 		}
 
-		if (actualType == expectedType) { // Return the ship of expected type.
+		if (actualType == expectedType) {	// Return the ship of expected type.
 			return ship.first;
 		}
 	}

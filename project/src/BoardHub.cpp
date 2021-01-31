@@ -10,10 +10,10 @@ bool BoardHub::modifyShipPosition(const ShipPosition &shipPosition, const bool &
 	int endPositionRow = endPosition.getRow();
 	int endPositionCol = endPosition.getCol();
 
-	if (removeShip) { // Remove the ship from the map.
+	if (removeShip) {	// Remove the ship from the map.
 		return boardEngine->removeShip(startPositionRow, startPositionCol, endPositionRow, endPositionCol, ship);
 	}
-	else { // Place the ship on the map.
+	else {				// Place the ship on the map.
 		return boardEngine->setShip(startPositionRow, startPositionCol, endPositionRow, endPositionCol, ship);
 	}
 }
@@ -23,12 +23,12 @@ bool BoardHub::changeShipToNewPosition(const ShipPosition &oldShipPosition, std:
 
 	//Remove the ship old position.
 	if (modifyShipPosition(oldShipPosition, true)) {
-		changeShipAvailableNumber(ship, false); // Increate the count of this shipType
+		changeShipAvailableNumber(ship, false);			// Increate the count of this shipType
 		if (!placeShip(ship, newStartPosition, newEndPosition)) {
 
 			//If the ship can't be placed to the new position then it is placed to the old position.
 			modifyShipPosition(oldShipPosition, false);
-			changeShipAvailableNumber(ship, true);	// Reduce the count of this shipType
+			changeShipAvailableNumber(ship, true);		// Reduce the count of this shipType
 			return false;
 		}
 		return true;
@@ -153,8 +153,8 @@ bool BoardHub::placeShip(Ship *ship, std::string &startPosition, std::string &en
 	if (isShipAvailable(ship) && !isContainsShip(shipPosition)) {
 
 		//If the ship is successfully placed on the map then it is added to the game.
-		if (modifyShipPosition(shipPosition, false)) { // false == place
-			changeShipAvailableNumber(ship, true); // Reduce the available shipType
+		if (modifyShipPosition(shipPosition, false)) {	// false == place
+			changeShipAvailableNumber(ship, true);		// Reduce the available shipType
 			ships.push_back(shipPosition);
 			return true;
 		}
@@ -171,7 +171,6 @@ bool BoardHub::placeShip(Ship *ship, std::string &startPosition, std::string &en
 }
 
 bool BoardHub::changeShipPosition(std::string &shipPosition, std::string &newStartPosition, std::string &newEndPosition) {
-	
 	Position newPosition(shipPosition);
 	ShipPosition oldShipPosition = getShipPositionAt(newPosition);
 
@@ -202,26 +201,27 @@ void BoardHub::lineAttack(const ShipPosition &sp) {
 	if (startPosition.getRow() == endPosition.getRow()) {
 		int start = std::min(startPosition.getCol(), endPosition.getCol());
 		int end = std::max(startPosition.getCol(), endPosition.getCol());
-		for (int i = start; i <= end; i++)
+		for (int i = start; i <= end; i++) {
 			boardEngine->placeAtPosition(startPosition.getRow(), i, numberMark);
+		}
 	}
 	else {
 		int start = std::min(startPosition.getRow(), endPosition.getRow());
 		int end = std::max(startPosition.getRow(), endPosition.getRow());
-		for (int i = start; i <= end; i++)
+		for (int i = start; i <= end; i++) {
 			boardEngine->placeAtPosition(i, startPosition.getCol(), numberMark);
+		}
 	}
 }
 
 bool BoardHub::attack(std::string &position) {
-	
 	Position newPosition(position);
 	int row = newPosition.getRow();
 	int col = newPosition.getCol();
 	if (boardEngine->fireAtPosition(row, col)) {
-		ShipPosition shipPosition = getShipPositionAt(newPosition); // Get a ship from the hit field
+		ShipPosition shipPosition = getShipPositionAt(newPosition);		// Get a ship from the hit field
 		if (shipPosition.getShip()->getId() != -1) {
-			attackShip(shipPosition); // If there is a ship then the ship takes damage.
+			attackShip(shipPosition);									// If there is a ship then the ship takes damage.
 		}
 		return true;
 	}
@@ -241,12 +241,15 @@ int BoardHub::getShipAvailableNumber(const ShipType &shipType) const {
 	if (shipType == CARRIER) {
 		return this->carrierNumbers;
 	}
-	if (shipType == CRUISER)
+	else if (shipType == CRUISER) {
 		return this->cruiserNumbers;
-	if (shipType == DESTROYER)
+	}
+	else if (shipType == DESTROYER) {
 		return this->destroyerNumbers;
-	if (shipType == SUBMARINE)
+	}
+	else if (shipType == SUBMARINE) {
 		return this->submarineNumbers;
+	}
 
 	return -1;
 }

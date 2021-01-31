@@ -11,11 +11,10 @@ void Ship::setHealth(int health) {
 	this->health = health;
 }
 
-Ship::Ship() : shipID(-1), size(-1), health(-1) {
-}
+Ship::Ship() : shipID(-1), size(-1), health(-1) {}
 
 Ship::Ship(int shipID, int size, ShipType shipType) : shipID(shipID),
-		size(size), shipType(shipType), health(size) {
+	size(size), shipType(shipType), health(size) {
 }
 
 Ship::Ship(const Ship &s) {
@@ -69,14 +68,10 @@ bool operator== (Ship &lhs, Ship &rhs) {
 	return true;
 }
 
-Carrier::Carrier(int shipId) : Ship(shipId, CARRIER_SIZE, CARRIER) {
-}
+Carrier::Carrier(int shipId) : Ship(shipId, CARRIER_SIZE, CARRIER) {}
 
-Cruiser::Cruiser(int shipId) : Ship(shipId, CRUISER_SIZE, CRUISER) {
-}
+Cruiser::Cruiser(int shipId) : Ship(shipId, CRUISER_SIZE, CRUISER) {}
 
-Destroyer::Destroyer(int shipId) : Ship(shipId, DESTROYER_SIZE, DESTROYER) {
-}
+Destroyer::Destroyer(int shipId) : Ship(shipId, DESTROYER_SIZE, DESTROYER) {}
 
-Submarine::Submarine(int shipId) : Ship(shipId, SUBMARINE_SIZE, SUBMARINE) {
-}
+Submarine::Submarine(int shipId) : Ship(shipId, SUBMARINE_SIZE, SUBMARINE) {}

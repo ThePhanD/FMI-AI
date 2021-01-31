@@ -14,10 +14,12 @@ private:
 
 	ProbabilityDensityAlg *probDensityAlg;
 
+	void deleteHiddenBoard(char** hiddenBoard);
 	void setUpBoardHubPlayerOne();
 	void setUpBoardHubPlayerTwo();
 	void setUpBoardHubAi(int playerNumber, std::vector<std::string> commands);
 	void printMenu();
+	void printGameOptions() const;
 	bool isGameOver();
 	void showPlayerOneGameResult();
 	void showPlayerTwoGameResult();
@@ -31,11 +33,13 @@ private:
 	void startGame();
 	void startGameWithOneAi();
 
+	void runWithTwoPlayer();
+	void runWithOneAiProbabilityDensityAlg();
+
 public:
 	GameApi();
 	~GameApi();
 	
 	void run();
-	void runWithOneAiProbabilityDensityAlg();
 };
 

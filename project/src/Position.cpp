@@ -59,10 +59,12 @@ int Position::getCol() const {
 }
 
 bool operator== (Position &lhs, Position &rhs) {
-	if (lhs.row != rhs.row)
+	if (lhs.row != rhs.row) {
 		return false;
-	if (lhs.col != rhs.col)
+	}
+	if (lhs.col != rhs.col) {
 		return false;
+	}
 
 	return true;
 }

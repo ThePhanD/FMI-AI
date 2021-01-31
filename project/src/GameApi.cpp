@@ -96,13 +96,13 @@ std::string GameApi::executeTurn(std::string turn, bool isPlayerOne) {
 	}
 }
 
-void GameApi::updatePlayers() {
-	if (playerOneHub->isGameOver()) { // Player one lost the game
+void GameApi::updatePlayers(){	
+	if (playerOneHub->isGameOver()) {			// Player one lost the game
 		showPlayerOneGameResult();
 		std::cout << "The opponet won the game!" << std::endl;
 		std::cout << "You lost the game!" << std::endl;
 	}
-	else if (playerTwoHub->isGameOver()) { // Plyaer two lost the game
+	else if (playerTwoHub->isGameOver()) {		// Plyaer two lost the game
 		showPlayerOneGameResult();
 		std::cout << "The opponet lost the game!" << std::endl;
 		std::cout << "You won the game!" << std::endl;
@@ -154,13 +154,13 @@ std::string GameApi::executePlayerTwoTurn() {
 void GameApi::startGame() {
 	while (true) {
 		printMenu();
-		showPlayerOneGameResult(); // Show player One game result
-		std::string message = executePlayerOneTurn(); // Player One turn
+		showPlayerOneGameResult();						// Show player One game result
+		std::string message = executePlayerOneTurn();	// Player One turn
 		if (isGameOver()) {
 			break;
 		}
 
-		if (!message.compare("QUIT")) { // When player One left the game by typing <quit>
+		if (!message.compare("QUIT")) {					// When player One left the game by typing <quit>
 			std::cout << "You surrender!" << std::endl;
 			std::cout << "The opponent won the game!" << std::endl;
 			break;
@@ -171,7 +171,7 @@ void GameApi::startGame() {
 			break;
 		}
 
-		if (!inputLine.compare("QUIT")) { // When player Two left the game by typing <quit>
+		if (!inputLine.compare("QUIT")) {				// When player Two left the game by typing <quit>
 			std::cout << "You won the game!" << std::endl; 
 			std::cout << "The opponent surrender!" << std::endl;
 			break;
@@ -191,7 +191,40 @@ GameApi::~GameApi() {
 	delete playerTwoHub;
 }
 
+void GameApi::printGameOptions() const {
+	std::cout << "Welcome to Battleship FMI Style!" << std::endl;
+	std::cout << "Choose one of the option below!" << std::endl;
+	std::cout << "1) Plaver vs Player" << std::endl;
+	std::cout << "2) Plaver vs AI-Normal" << std::endl;
+	std::cout << "3) Plaver vs AI-Hard" << std::endl;
+	std::cout << "4) Quit!" << std::endl;
+	std::cout << "-> ";
+}
+
 void GameApi::run() {
+	int option;
+
+	while (true) {
+		printGameOptions();
+		std::cin >> option;
+		std::cin.ignore();
+
+		switch (option) {
+		case 1: runWithTwoPlayer();
+			return;
+		case 2:
+			return;
+		case 3: runWithOneAiProbabilityDensityAlg();
+			return;
+		case 4: std::cout << "Support the game :D !" << std::endl;
+			return;
+		default:
+			continue;
+		}
+	}
+}
+
+void GameApi::runWithTwoPlayer() {
 	setUpBoardHubPlayerOne();
 	setUpBoardHubPlayerTwo();
 
@@ -244,16 +277,23 @@ std::string GameApi::executeAITurn(std::pair<int, int> pos) {
 	return message;
 }
 
+void GameApi::deleteHiddenBoard(char** hiddenBoard) {
+	for (int i = 0; i < 10; i++) {
+		delete[] hiddenBoard[i];
+	}
+	delete[] hiddenBoard;
+}
+
 void GameApi::startGameWithOneAi() {
 	while (true) {
 		printMenu();
-		showPlayerOneGameResult(); // Show player One game result
-		std::string message = executePlayerOneTurn(); // Player One turn
+		showPlayerOneGameResult();						// Show player One game result
+		std::string message = executePlayerOneTurn();	// Player One turn
 		if (isGameOver()) {
 			break;
 		}
-
-		if (!message.compare("QUIT")) { // When player One left the game by typing <quit>
+		
+		if (!message.compare("QUIT")) {					// When player One left the game by typing <quit>
 			std::cout << "You surrender!" << std::endl;
 			std::cout << "The opponent won the game!" << std::endl;
 			break;
@@ -264,6 +304,7 @@ void GameApi::startGameWithOneAi() {
 		std::string inputLine = executeAITurn(pos);
 		char** board = playerOneHub->getBoardEngine()->getHiddenBoard();
 		probDensityAlg->setHitFlag(board[pos.first][pos.second] == HIT_SHIP_FIELD);
+		deleteHiddenBoard(board);
 
 		if (isGameOver()) {
 			break;

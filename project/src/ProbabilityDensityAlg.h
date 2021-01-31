@@ -20,6 +20,7 @@ private:
 	std::vector<std::vector<int>> densityBoard;
 	std::vector<std::pair<int, int>> possiblePositions;
 
+	void deleteHiddenBoard(char** hiddenBoard);
 	bool isHorizontal(int row, int col, int shipSize);
 	bool isVertical(int row, int col, int shipSize);
 	std::vector<std::vector<int>> calculateDensity();

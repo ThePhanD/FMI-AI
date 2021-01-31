@@ -1,14 +1,28 @@
 #include "ProbabilityDensityAlg.h"
 
+void ProbabilityDensityAlg::deleteHiddenBoard(char** hiddenBoard) {
+	for (int i = 0; i < 10; i++) {
+		delete[] hiddenBoard[i];
+	}
+	delete[] hiddenBoard;
+}
+
 bool ProbabilityDensityAlg::isHorizontal(int row, int col, int shipSize) {
 	if ((TEN - col) < shipSize)
 		return false;
 
 	char **board = boardHub->getBoardEngine()->getHiddenBoard();
 	for (int i = 0; i < shipSize; ++i, col++) {
-		if (board[row][col] != EMPTY_FIELD)
+		if (board[row][col] != EMPTY_FIELD) {
+			for (int i = 0; i < 10; i++) {
+				delete[] board[i];
+			}
+			delete[] board;
 			return false;
+		}
 	}
+
+	deleteHiddenBoard(board);
 	return true;
 }
 
@@ -18,9 +32,12 @@ bool ProbabilityDensityAlg::isVertical(int row, int col, int shipSize) {
 
 	char **board = boardHub->getBoardEngine()->getHiddenBoard();
 	for (int i = 0; i < shipSize; ++i, row++) {
-		if (board[row][col] != EMPTY_FIELD)
+		if (board[row][col] != EMPTY_FIELD) {
 			return false;
+		}
 	}
+
+	deleteHiddenBoard(board);
 	return true;
 }
 
@@ -61,6 +78,8 @@ std::vector<std::vector<int>> ProbabilityDensityAlg::calculateDensity() {
 		}
 	}
 
+	deleteHiddenBoard(board);
+
 	return calcBoard;
 }
 
@@ -68,8 +87,9 @@ void ProbabilityDensityAlg::initBoard(std::vector<std::vector<int>> &board) {
 	board.clear();
 	for (int i = 0; i < TEN; ++i) {
 		std::vector<int> row;
-		for (int j = 0; j < TEN; ++j)
+		for (int j = 0; j < TEN; ++j) {
 			row.push_back(0);
+		}
 
 		board.push_back(row);
 	}
@@ -171,21 +191,26 @@ void ProbabilityDensityAlg::calcDensityDestroyMode() {
 		i++;
 		cnt++;
 	}
+
+	deleteHiddenBoard(board);
 }
 
 void ProbabilityDensityAlg::initDestroyMode() {
 	int row = lastPredicPosisition.first;
 	int col = lastPredicPosisition.second;
 	densityBoard[row][col] = ZERO;
+
 	calcDensityDestroyMode();
 	initBestPosition();
 }
 
 std::pair<int, int> ProbabilityDensityAlg::getHighestProbabilityPos() {
 	int idx = rand() % possiblePositions.size();
+
 	lastPredicPosisition = possiblePositions[idx];
 	possiblePositions.erase(possiblePositions.begin() + idx);
 	densityBoard[lastPredicPosisition.first][lastPredicPosisition.second] = ZERO;
+
 	return lastPredicPosisition;
 }
 
@@ -214,30 +239,20 @@ std::pair<int, int> ProbabilityDensityAlg::getPosition(BoardHub *boardHub) {
 	}
 
 	if (destroyMode) {
-
 		if (hitFlag) {
 			initDestroyMode();
-
-			printDensityBoard();
-
 			return getHighestProbabilityPos();
 		}
 
 		initBestPosition();
-
-		printDensityBoard();
-
 		return getHighestProbabilityPos();
 	}
 	else {
-	
 		hitHorizontal = 0;
 		hitVertical = 0;
 		initBoard(densityBoard);
 		this->densityBoard = calculateDensity();
 		initBestPosition();
-
-		printDensityBoard();
 
 		return getHighestProbabilityPos();
 	}
@@ -288,6 +303,8 @@ void ProbabilityDensityAlg::checkOrient() {
 		if (col + 2 <= 9 && board[row][col + 2] == EMPTY_FIELD)
 			densityBoard[row][col + 2] += HIGH_PROBABILITY;
 	}
+
+	deleteHiddenBoard(board);
 }
 
 void ProbabilityDensityAlg::checkMiss() {
@@ -355,6 +372,8 @@ void ProbabilityDensityAlg::checkMiss() {
 			}
 		}
 	}
+
+	deleteHiddenBoard(board);
 }
 
 bool ProbabilityDensityAlg::checkHitShipButNotSink() {
@@ -411,6 +430,7 @@ bool ProbabilityDensityAlg::checkHitShipButNotSink() {
 		}
 	}
 
+	deleteHiddenBoard(board);
 	return flag;
 }
 
@@ -455,6 +475,8 @@ void ProbabilityDensityAlg::checkHitDensity() {
 				densityBoard[row + 1][col + 1] -= 5;
 		}
 	}
+
+	deleteHiddenBoard(board);
 }
 
 void ProbabilityDensityAlg::printDensityBoard() const {

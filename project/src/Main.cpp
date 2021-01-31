@@ -6,7 +6,7 @@ using namespace std;
 int main()
 {	
 	GameApi api;
-	api.runWithOneAiProbabilityDensityAlg();
+	api.run();
 
 	return 0;
 }

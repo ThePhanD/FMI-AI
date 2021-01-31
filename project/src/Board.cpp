@@ -2,20 +2,23 @@
 
 void Board::fillBoard() {
 	for (int i = ZERO; i < TEN; ++i) {
-		for (int j = ZERO; j < TEN; ++j)
+		for (int j = ZERO; j < TEN; ++j) {
 			board[i][j] = EMPTY_FIELD;
+		}
 	}
 }
 
 void Board::initDefaultBoard(char** &board) {
 	board = new char*[TEN];
-	for (int i = ZERO; i < TEN; ++i)
+	for (int i = ZERO; i < TEN; ++i) {
 		board[i] = new char[TEN];
+	}
 }
 
 void Board::deleteBoard() {
-	for (int i = ZERO; i < TEN; ++i)
+	for (int i = ZERO; i < TEN; ++i) {
 		delete[] board[i];
+	}
 
 	delete[] board;
 }
@@ -23,15 +26,17 @@ void Board::deleteBoard() {
 void Board::copyBoard(char** fromBoard, char** &toBoard) {
 	initDefaultBoard(toBoard);
 	for (int i = ZERO; i < TEN; ++i) {
-		for (int j = ZERO; j < TEN; ++j)
+		for (int j = ZERO; j < TEN; ++j) {
 			toBoard[i][j] = fromBoard[i][j];
+		}
 	}
 }
 
 char** Board::hideShips() {
 	char** newBoard = new char*[TEN];
-	for (int i = ZERO; i < TEN; ++i)
+	for (int i = ZERO; i < TEN; ++i) {
 		newBoard[i] = new char[TEN];
+	}
 
 	copyBoard(getBoard(), newBoard);
 
@@ -75,6 +80,7 @@ Board::~Board() {
 
 Board::Board(char** board) {
 	if (board == nullptr) {
+		deleteBoard();
 		initDefaultBoard(this->board);
 		fillBoard();
 	}
@@ -119,7 +125,13 @@ char** Board::getHiddenBoard() {
 
 void Board::printUncoverMap() {
 	if (board == nullptr) {
-		copyBoard(Board().getBoard(), this->board);
+		char **defaultBoard = Board().getBoard();
+		copyBoard(defaultBoard, this->board);
+
+		for (int i = ZERO; i < TEN; ++i)
+			delete[] defaultBoard[i];
+
+		delete[] defaultBoard;
 	}
 
 	printNumbers();
