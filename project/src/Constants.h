@@ -57,3 +57,6 @@ const ShipType SUBMARINE = ShipType::SUBMARINE;
 const ShipType DESTROYER = ShipType::DESTROYER;
 const ShipType CRUISER = ShipType::CRUISER;
 const ShipType CARRIER = ShipType::CARRIER;
+
+const int RUNWITHPROBABLITYALG = 3;
+const int RUNWITHHUNTPARITY = 2;
