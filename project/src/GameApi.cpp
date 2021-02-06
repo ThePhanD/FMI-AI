@@ -166,6 +166,7 @@ void GameApi::startGame() {
 			break;
 		}
 
+		showPlayerTwoGameResult();
 		std::string inputLine = executePlayerTwoTurn(); // Player Two turn
 		if (isGameOver()) {
 			break;
