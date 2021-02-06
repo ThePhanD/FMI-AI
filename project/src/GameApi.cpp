@@ -84,6 +84,10 @@ std::string GameApi::executeAttackUtility(BoardHub* boardHub, int playerNumber, 
 }
 
 std::string GameApi::executeTurn(std::string turn, bool isPlayerOne) {
+	if (turn.empty()) {
+		return INVALID_COMMAND;
+	}
+
 	if (controlPanel->isAttackAction(turn)) {
 		if (isPlayerOne) {
 			return executeAttackUtility(playerTwoHub, 1, turn);

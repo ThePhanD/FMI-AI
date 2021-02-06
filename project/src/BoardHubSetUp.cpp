@@ -62,6 +62,11 @@ void split(std::vector<std::string> &tokens, std::string input) {
 }
 
 void BoardHubSetUp::executeCommand(std::string command) {
+	if (command.empty()) {
+		std::cout << INVALID_COMMAND << std::endl;
+		return;
+	}
+
 	std::vector<std::string> argv;
 	split(argv, command);
 
